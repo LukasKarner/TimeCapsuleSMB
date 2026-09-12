@@ -1220,7 +1220,7 @@ MaSt = (
         self.assertIn("ATA_STANDBY=''\n", rendered)
         self.assertIn("NBNS_ENABLED=1\n", rendered)
         self.assertIn("RSYNC_ENABLED=0\n", rendered)
-        self.assertIn("TELEMETRY='false'\n", rendered)
+        self.assertIn("TELEMETRY=false\n", rendered)
         self.assertIn("SMBD_DEBUG_LOGGING=1\n", rendered)
         self.assertNotIn("SMB_NETBIOS_NAME", rendered)
         self.assertNotIn("MDNS_INSTANCE_NAME", rendered)
