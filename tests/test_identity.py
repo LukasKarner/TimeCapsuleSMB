@@ -23,7 +23,7 @@ class IdentityTests(unittest.TestCase):
             self.assertTrue(install_id)
             values = parse_bootstrap_values(path)
             self.assertEqual(values["INSTALL_ID"], install_id)
-            self.assertNotIn("TELEMETRY", values)
+            self.assertEqual(values["TELEMETRY"], "false")
 
     def test_ensure_install_id_preserves_telemetry_false(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -48,7 +48,7 @@ class IdentityTests(unittest.TestCase):
             enabled = set_telemetry_enabled(True, path)
             self.assertEqual(enabled.install_id, "install-one")
             self.assertTrue(enabled.telemetry_enabled)
-            self.assertEqual(parse_bootstrap_values(path), {"INSTALL_ID": "install-one"})
+            self.assertEqual(parse_bootstrap_values(path), {"INSTALL_ID": "install-one", "TELEMETRY": "true"})
 
 
 if __name__ == "__main__":

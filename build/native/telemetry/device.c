@@ -231,9 +231,9 @@ int read_deploy_release_tag(char *out, size_t out_len) {
 
 int telemetry_enabled(void) {
     char value[16];
-    /* Only an explicit opt-out disables reporting; older configs omit it. */
-    return read_config_value_file(HEARTBEAT_FLASH_CONFIG_PATH, "TELEMETRY", value, sizeof(value)) != 0 ||
-           strcmp(value, "false") != 0;
+    /* Keep telemetry off unless the device config explicitly opts in. */
+    return read_config_value_file(HEARTBEAT_FLASH_CONFIG_PATH, "TELEMETRY", value, sizeof(value)) == 0 &&
+           strcasecmp(value, "true") == 0;
 }
 
 int read_uptime_seconds(long *out) {

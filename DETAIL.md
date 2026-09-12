@@ -668,7 +668,7 @@ Current important `.env` values include:
 
 Current `.bootstrap` values include:
 - `INSTALL_ID`
-- optional `TELEMETRY=false`
+- `TELEMETRY=false` by default (set `TELEMETRY=true` to opt in)
 
 ## macOS App Advanced Checkboxes
 
@@ -1363,7 +1363,7 @@ Current transport behavior:
 - events are sent to the configured HTTPS telemetry endpoint
 - started events are sent asynchronously
 - finished events are sent synchronously so they are not lost at process exit
-- if `.bootstrap` contains `TELEMETRY=false`, telemetry is disabled
+- telemetry stays disabled unless `.bootstrap` explicitly sets `TELEMETRY=true`
 
 ## Uninstall
 

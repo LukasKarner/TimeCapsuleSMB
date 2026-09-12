@@ -314,11 +314,11 @@ final class AppSettingsStoreTests: XCTestCase {
 
         var settings = AppSettings.default
         settings.language = .simplifiedChinese
-        settings.telemetryEnabled = false
+        settings.telemetryEnabled = true
         try await appStore.saveAppSettings(settings)
 
         try await waitUntilStoreState { runner.calls.map(\.operation).contains("set-telemetry") }
-        XCTAssertEqual(runner.calls.first?.params["enabled"], .bool(false))
+        XCTAssertEqual(runner.calls.first?.params["enabled"], .bool(true))
         XCTAssertEqual(L10n.currentLanguage, .simplifiedChinese)
 
         var helperSettings = settings
