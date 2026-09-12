@@ -21,14 +21,6 @@
 #ifndef TC_TELEMETRY_LANE
 #define TC_TELEMETRY_LANE "6"
 #endif
-#ifndef TC_DEBUG_BASE_URL
-#define TC_DEBUG_BASE_URL "http://timecapsulesmb.jamesyc.com/downloads/bin/heartbeat"
-#endif
-#ifndef TC_DEBUG_QUERY
-/* The server maps this additive query to debug artifacts while legacy
- * heartbeat downloads retain their original meaning and HTTP proxy route. */
-#define TC_DEBUG_QUERY "?debug=true"
-#endif
 #ifndef TC_CURL_PATH
 #define TC_CURL_PATH "/usr/bin/curl"
 #endif
@@ -51,11 +43,8 @@ extern volatile sig_atomic_t telemetry_stop;
 int telemetry_enabled(void);
 int telemetry_payload(char *json, size_t cap, const char *reason, const char *nonce);
 int telemetry_response_parse(const char *json, size_t len, struct telemetry_response *out);
-int telemetry_verify(const unsigned char *data, size_t len, const unsigned char *signature, size_t sig_len);
-int telemetry_authorized(const struct telemetry_response *response, const char *payload);
 int telemetry_http(const char *url, const char *payload, unsigned char **out, size_t *len, size_t limit);
 int telemetry_cycle(const char *reason, int lock_fd);
-int telemetry_debug_job(const char *reason, int lock_fd);
 int telemetry_nonce(char out[33]);
 int telemetry_schedule_due(struct telemetry_schedule *schedule, time_t now);
 void telemetry_schedule_started(struct telemetry_schedule *schedule, time_t now);

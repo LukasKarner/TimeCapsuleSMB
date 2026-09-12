@@ -31,7 +31,6 @@
 #define EXIT_USAGE 2
 #define EXIT_AUTO_IP_UNAVAILABLE 11
 #define EXIT_AUTO_IP_PROBE_FAILED 13
-#define TC_HEARTBEAT_LANE "heartbeat6"
 struct config {
     char netbios_name[MAX_NAME];
     uint32_t ipv4_addr;

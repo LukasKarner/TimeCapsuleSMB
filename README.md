@@ -375,7 +375,7 @@ The commands have logging and telemetry enabled by default. Errors and exception
 
 The checked-in binaries are already built. If you want to rebuild them yourself, the maintainer build flow lives under [build/](build) and depends on a NetBSD VM.
 
-The native helpers are `mdns-advertiser`, `nbns-advertiser`, `service` (hashing and network probes), and `telemetry` (heartbeat reporting and signed debug execution). Each links into one static executable; see [build/native/README.md](build/native/README.md).
+The native helpers are `mdns-advertiser`, `nbns-advertiser`, `service` (hashing and network probes), and `telemetry` (heartbeat reporting and scheduling). Each links into one static executable; see [build/native/README.md](build/native/README.md).
 
 The main build outputs are:
 

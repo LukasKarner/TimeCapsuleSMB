@@ -22,6 +22,7 @@ int telemetry_cycle(const char *reason, int lock_fd) {
     size_t len;
     struct telemetry_response response;
     int rc;
+    (void)lock_fd;
     if (telemetry_nonce(nonce) || telemetry_payload(payload, sizeof(payload), reason, nonce) || telemetry_stop) return 1;
     if (telemetry_http(HEARTBEAT_ENDPOINT, payload, &body, &len, TC_RESPONSE_MAX)) {
         fputs("telemetry: POST failed\n", stderr); return 1;
@@ -29,10 +30,5 @@ int telemetry_cycle(const char *reason, int lock_fd) {
     rc = telemetry_response_parse((const char *)body, len, &response);
     free(body);
     if (rc) { fputs("telemetry: invalid response\n", stderr); return 1; }
-    if (!response.debug) return 0;
-    if (!telemetry_authorized(&response, payload)) {
-        fputs("telemetry: debug authorization signature invalid\n", stderr); return 1;
-    }
-    if (telemetry_stop) return 1;
-    return telemetry_debug_job(reason, lock_fd);
+    return 0;
 }
