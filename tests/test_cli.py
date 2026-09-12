@@ -5216,6 +5216,7 @@ class CliTests(unittest.TestCase):
         self.assertIn(f"TC_DEPLOY_CLI_VERSION_CODE={CLI_VERSION_CODE}\n", flash_config)
         self.assertNotIn("PAYLOAD_DIR_NAME=", flash_config)
         self.assertIn("NBNS_ENABLED=1\n", flash_config)
+        self.assertIn("TELEMETRY='false'\n", flash_config)
         self.assertIn("ANY_PROTOCOL=0\n", flash_config)
         self.assertIn("VFS_AIO_FORK_ENABLED=0\n", flash_config)
         self.assertIn("MDNS_ADVERTISE_AFP=0\n", flash_config)
@@ -5244,6 +5245,7 @@ class CliTests(unittest.TestCase):
 
         self.assertEqual(result.rc, 0)
         self.assertIn("NBNS_ENABLED=0\n", captured["flash_config"])
+        self.assertIn("TELEMETRY='false'\n", captured["flash_config"])
         finished = self.telemetry_payload("deploy_finished")
         self.assertFalse(finished["nbns_enabled"])
 
@@ -5263,6 +5265,7 @@ class CliTests(unittest.TestCase):
 
         self.assertEqual(result.rc, 0)
         self.assertIn("RSYNC_ENABLED=1\n", captured["flash_config"])
+        self.assertIn("TELEMETRY='false'\n", captured["flash_config"])
         self.assertIn("port = 873\n", captured["rsync_config"])
         self.assertIn("path = /Volumes/dk2/ShareRoot\n", captured["rsync_config"])
         finished = self.telemetry_payload("deploy_finished")

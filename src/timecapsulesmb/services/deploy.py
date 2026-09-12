@@ -1294,6 +1294,7 @@ def render_flash_runtime_config(
         ("ATA_STANDBY", runtime_ata_standby),
         ("NBNS_ENABLED", 1 if nbns_enabled else 0),
         ("RSYNC_ENABLED", 1 if rsync_enabled else 0),
+        ("TELEMETRY", "false"),
         ("SMBD_DEBUG_LOGGING", 1 if effective_debug_logging else 0),
         ("MDNS_DEBUG_LOGGING", 1 if effective_debug_logging else 0),
     ]

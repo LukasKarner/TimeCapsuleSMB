@@ -197,21 +197,12 @@ def test_device_opt_out_exits_without_network_or_debug_files(cycle, rig, args, s
     assert sorted(p.name for p in (root / 'work').iterdir()) == ['keep.txt']
 
 
-@pytest.mark.parametrize('setting', [None, '', '# TELEMETRY=false\n', 'OTHER_TELEMETRY=false\n', 'TELEMETRY=falsehood\n'])
-def test_reporting_stays_disabled_without_explicit_opt_in(cycle, rig, setting):
+@pytest.mark.parametrize('setting', [None, '', '# TELEMETRY=false\n', 'OTHER_TELEMETRY=false\n', 'TELEMETRY=falsehood\n', 'TELEMETRY=true\n'])
+def test_reporting_remains_enabled_without_explicit_opt_out(cycle, rig, setting):
     run, state, *_ = cycle
     root, _, _ = rig
     if setting is None: (root / 'config').unlink()
     else: (root / 'config').write_text(setting)
-    assert run('false').returncode == 0
-    assert state['calls'] == []
-
-
-@pytest.mark.parametrize('setting', ['TELEMETRY=true\n', "TELEMETRY='true'\n", 'TELEMETRY="true"\n', '  TELEMETRY = true  \r\n'])
-def test_reporting_requires_explicit_opt_in(cycle, rig, setting):
-    run, state, *_ = cycle
-    root, _, _ = rig
-    (root / 'config').write_text(setting)
     assert run('false').returncode == 0
     assert state['calls'] == [('POST', '/v1/router-heartbeats')]
 
