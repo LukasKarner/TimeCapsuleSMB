@@ -160,7 +160,7 @@ struct AppSettings: Codable, Equatable {
         appearance: .system,
         defaultBonjourTimeoutSeconds: 6,
         defaultDeviceSettings: .default,
-        telemetryEnabled: true,
+        telemetryEnabled: false,
         helperPathOverride: "",
         showRawBackendEventsByDefault: true,
         checkForUpdatesOnLaunch: true,

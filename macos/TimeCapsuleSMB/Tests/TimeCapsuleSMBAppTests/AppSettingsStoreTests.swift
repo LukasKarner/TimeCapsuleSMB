@@ -314,11 +314,11 @@ final class AppSettingsStoreTests: XCTestCase {
 
         var settings = AppSettings.default
         settings.language = .simplifiedChinese
-        settings.telemetryEnabled = false
+        settings.telemetryEnabled = true
         try await appStore.saveAppSettings(settings)
 
         try await waitUntilStoreState { runner.calls.map(\.operation).contains("set-telemetry") }
-        XCTAssertEqual(runner.calls.first?.params["enabled"], .bool(false))
+        XCTAssertEqual(runner.calls.first?.params["enabled"], .bool(true))
         XCTAssertEqual(L10n.currentLanguage, .simplifiedChinese)
 
         var helperSettings = settings
@@ -326,6 +326,32 @@ final class AppSettingsStoreTests: XCTestCase {
         try await appStore.saveAppSettings(helperSettings)
 
         XCTAssertEqual(appStore.backend.helperPath, "/tmp/tcapsule-helper")
+    }
+
+    func testStartSyncsTelemetryFromPersistedSettings() async throws {
+        let temp = try TemporaryDirectory()
+        let settingsURL = temp.url.appendingPathComponent("settings.json")
+        let settingsStore = AppSettingsStore(settingsURL: settingsURL)
+        var settings = AppSettings.default
+        settings.telemetryEnabled = true
+        settings.checkForUpdatesOnLaunch = false
+        try await settingsStore.save(settings)
+
+        let runner = StoreTestRunner(responses: [])
+        let coordinator = OperationCoordinator(backend: BackendClient(runner: runner))
+        let appStore = AppStore(
+            appReadinessStore: AppReadinessStore(backend: coordinator.appLane.backend),
+            appSettingsStore: settingsStore,
+            deviceRegistry: DeviceRegistryStore(applicationSupportURL: temp.url),
+            operationCoordinator: coordinator,
+            passwordStore: InMemoryPasswordStore()
+        )
+
+        await appStore.start()
+
+        try await waitUntilStoreState { runner.calls.map(\.operation).contains("set-telemetry") }
+        let telemetryCall = try XCTUnwrap(runner.calls.first(where: { $0.operation == "set-telemetry" }))
+        XCTAssertEqual(telemetryCall.params["enabled"], .bool(true))
     }
 
     func testSavingSettingsAppliesLanguageBeforePublishingSettings() async throws {
