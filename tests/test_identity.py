@@ -25,6 +25,16 @@ class IdentityTests(unittest.TestCase):
             self.assertEqual(values["INSTALL_ID"], install_id)
             self.assertEqual(values["TELEMETRY"], "false")
 
+    def test_load_install_identity_defaults_missing_telemetry_to_disabled(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / ".bootstrap"
+            path.write_text("INSTALL_ID=existing-install\n")
+
+            identity = load_install_identity(path)
+
+            self.assertEqual(identity.install_id, "existing-install")
+            self.assertFalse(identity.telemetry_enabled)
+
     def test_ensure_install_id_preserves_telemetry_false(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / ".bootstrap"
