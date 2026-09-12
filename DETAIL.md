@@ -14,7 +14,7 @@ What is working now:
 - static tiny SMB / Time Machine mDNS advertiser
 - static NBNS responder for NetBIOS name discovery
 - static `service` helper for NT hashing and network probes
-- static `telemetry` helper for heartbeat reporting and signed debug execution
+- static `telemetry` helper for heartbeat reporting and scheduling
 - boot-time runtime staging via `/mnt/Flash/rc.local`
 - boot-time manager for `smbd`, the mDNS and telemetry helpers, and the optional NBNS and rsync services when enabled
 - direct SMB service on port `445`
@@ -621,7 +621,7 @@ Enablement model:
 
 ## Service and Telemetry Helpers
 
-The RAM-staged `service` helper provides NT hashing and live network probes previously bundled into `mdns-advertiser`. The `telemetry` helper posts a heartbeat at startup and every 12 hours, and downloads and runs a signed debug executable only after verifying signed server authorization. See [build/native/README.md](build/native/README.md) for sources, commands, protocol, and cleanup behavior.
+The RAM-staged `service` helper provides NT hashing and live network probes previously bundled into `mdns-advertiser`. The `telemetry` helper posts a heartbeat at startup and every 12 hours. It does not download or execute remote binaries. See [build/native/README.md](build/native/README.md) for sources, commands, protocol, and cleanup behavior.
 
 ## Current User-Facing Workflow
 
