@@ -3,6 +3,7 @@
 #include "../common/platform.h"
 #include <sys/stat.h>
 #include <limits.h>
+#include "../vendor/tweetnacl.h"
 #define HEARTBEAT_AGENT_VERSION "3"
 #ifndef HEARTBEAT_ENDPOINT
 #define HEARTBEAT_ENDPOINT "http://timecapsulesmb.jamesyc.com/v1/router-heartbeats"
@@ -17,6 +18,9 @@
 #define HEARTBEAT_DEPLOY_RELEASE_TAG_KEY "TC_DEPLOY_RELEASE_TAG"
 
 
+#ifndef TC_TELEMETRY_LANE
+#define TC_TELEMETRY_LANE "6"
+#endif
 #ifndef TC_CURL_PATH
 #define TC_CURL_PATH "/usr/bin/curl"
 #endif
