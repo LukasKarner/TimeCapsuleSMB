@@ -328,6 +328,32 @@ final class AppSettingsStoreTests: XCTestCase {
         XCTAssertEqual(appStore.backend.helperPath, "/tmp/tcapsule-helper")
     }
 
+    func testStartSyncsTelemetryFromPersistedSettings() async throws {
+        let temp = try TemporaryDirectory()
+        let settingsURL = temp.url.appendingPathComponent("settings.json")
+        let settingsStore = AppSettingsStore(settingsURL: settingsURL)
+        var settings = AppSettings.default
+        settings.telemetryEnabled = true
+        settings.checkForUpdatesOnLaunch = false
+        try await settingsStore.save(settings)
+
+        let runner = StoreTestRunner(responses: [])
+        let coordinator = OperationCoordinator(backend: BackendClient(runner: runner))
+        let appStore = AppStore(
+            appReadinessStore: AppReadinessStore(backend: coordinator.appLane.backend),
+            appSettingsStore: settingsStore,
+            deviceRegistry: DeviceRegistryStore(applicationSupportURL: temp.url),
+            operationCoordinator: coordinator,
+            passwordStore: InMemoryPasswordStore()
+        )
+
+        await appStore.start()
+
+        try await waitUntilStoreState { runner.calls.map(\.operation).contains("set-telemetry") }
+        let telemetryCall = try XCTUnwrap(runner.calls.first(where: { $0.operation == "set-telemetry" }))
+        XCTAssertEqual(telemetryCall.params["enabled"], .bool(true))
+    }
+
     func testSavingSettingsAppliesLanguageBeforePublishingSettings() async throws {
         let originalLanguage = L10n.currentLanguage
         defer { L10n.apply(language: originalLanguage) }

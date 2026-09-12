@@ -106,6 +106,7 @@ final class AppStore: ObservableObject {
     func start() async {
         await appSettingsStore.load()
         applyAppSettings(appSettingsStore.settings)
+        syncTelemetryPreference(appSettingsStore.settings.telemetryEnabled)
         await deviceRegistry.load()
         await refreshPasswordStates()
         appReadinessStore.start()
